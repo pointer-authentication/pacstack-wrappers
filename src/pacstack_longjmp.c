@@ -102,7 +102,7 @@ int setjmp(jmp_buf env)
         "ldp   x1, x5, [sp, #16]         \n\t" // x1 = env, x5 = &guard
         "ldp   x29, x30, [sp], #32       \n\t" // load frame record
         "ldr   x4, [x1, %[clr]]          \n\t" // load lr from env
-        "eor   x3, x3, x4                \n\t" // x3 = MANGLE value
+        "eor   x3, x3, x4                \n\t" // x3 = guard value
         "mov   x2, lr                    \n\t" // x2 = return address
         "mov   x15, sp                   \n\t" // x15 = sp
         "eor   x15, x15, x3              \n\t" // mangle x15
