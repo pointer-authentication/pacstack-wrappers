@@ -1,0 +1,18 @@
+# test_longjmp
+check_PROGRAMS += test_longjmp \
+                  test_longjmp_nested
+
+test_longjmp_includes = include/pacstack_wrappers.h
+
+test_longjmp_SOURCES = ${test_longjmp_includesS} \
+                       tests/test_longjmp.c
+
+test_longjmp_CFLAGS = ${AM_CFLAGS} \
+                      -mllvm -pacstack=full \
+                      -iquote $(top_srcdir)/include
+
+test_longjmp_nested_SOURCES = ${test_longjmp_SOURCES}
+
+test_longjmp_nested_CFLAGS = ${test_longjmp_CFLAGS} \
+                             -DLEVEL_OF_NESTING=2
+

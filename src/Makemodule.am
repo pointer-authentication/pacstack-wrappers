@@ -1,0 +1,15 @@
+# libpacstack.so
+
+lib_LTLIBRARIES += libpacstack.la
+
+libpacstack_la_includes = \
+        include/pacstack_wrappers.h
+
+libpacstack_la_SOURCES = ${libpacstack_la_includes} \
+	src/pacstack_longjmp.c
+
+libpacstack_la_CFLAGS = ${AM_CFLAGS} \
+        -iquote $(top_srcdir)/include
+
+libpacstack_la_LDFLAGS = ${AM_LDFLAGS} \
+        -ldl
