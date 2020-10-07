@@ -95,8 +95,7 @@ __attribute__((naked))
 int setjmp(jmp_buf env)
 {
     __asm volatile (
-        "mov   x5, %[guard]              \n\t"
-        "stp   x29, x30, [sp, #-32]!     \n\t" // store frame record
+        "stp   x29, %[guard], [sp, #-32]!\n\t" // store frame record
         "stp   x0, x5,[sp, #16]          \n\t" // store env and &guard
 	"blr   %[real_setjmp]            \n\t" // call setjmp (clobbers x0)
         "adr   x3, .                     \n\t" // x3 = setjmp return site
