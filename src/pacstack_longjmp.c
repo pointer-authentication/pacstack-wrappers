@@ -121,7 +121,7 @@ int setjmp(jmp_buf env)
           [clr] "i" (JB_LR<<3),
           [guard] "r" (&guard),
 	  [real_setjmp] "r" (real_setjmp)
-        : "x0", "x1", "x2", "x3", "x4", "x5"
+        : "x0", "x1", "x2", "x3", "x4", "x5", "x15"
     );
 }
 
@@ -150,7 +150,7 @@ void longjmp(jmp_buf env, int val)
           [clr] "i" (JB_LR<<3),
           [guard] "r" (&guard),
 	  [real_longjmp] "r" (real_longjmp)
-        : "x0", "x1", "x5"
+        : "x0", "x1", "x5", "x15"
     );
 }
 
