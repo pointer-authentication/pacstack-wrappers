@@ -95,15 +95,14 @@ __attribute__((naked))
 int setjmp(jmp_buf env)
 {
     __asm volatile (
-        "mov   x5, %[guard]              \n\t"
-        "stp   x29, x30, [sp, #-32]!     \n\t" // store frame record
+        "stp   x29, %[guard], [sp, #-32]!\n\t" // store frame record
         "stp   x0, x5,[sp, #16]          \n\t" // store env and &guard
 	"blr   %[real_setjmp]            \n\t" // call setjmp (clobbers x0)
         "adr   x3, .                     \n\t" // x3 = setjmp return site
         "ldp   x1, x5, [sp, #16]         \n\t" // x1 = env, x5 = &guard
         "ldp   x29, x30, [sp], #32       \n\t" // load frame record
         "ldr   x4, [x1, %[clr]]          \n\t" // load lr from env
-        "eor   x3, x3, x4                \n\t" // x3 = MANGLE value
+        "eor   x3, x3, x4                \n\t" // x3 = guard value
         "mov   x2, lr                    \n\t" // x2 = return address
         "mov   x15, sp                   \n\t" // x15 = sp
         "eor   x15, x15, x3              \n\t" // mangle x15
@@ -122,7 +121,7 @@ int setjmp(jmp_buf env)
           [clr] "i" (JB_LR<<3),
           [guard] "r" (&guard),
 	  [real_setjmp] "r" (real_setjmp)
-        : "x0", "x1", "x2", "x3", "x4", "x5"
+        : "x0", "x1", "x2", "x3", "x4", "x5", "x15"
     );
 }
 
@@ -151,7 +150,7 @@ void longjmp(jmp_buf env, int val)
           [clr] "i" (JB_LR<<3),
           [guard] "r" (&guard),
 	  [real_longjmp] "r" (real_longjmp)
-        : "x0", "x1", "x5"
+        : "x0", "x1", "x5", "x15"
     );
 }
 
